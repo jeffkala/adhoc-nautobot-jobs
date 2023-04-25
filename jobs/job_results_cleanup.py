@@ -32,7 +32,6 @@ class ClearJobResultsJob(Job):
         for job_result in jobs_to_delete:
             if not commit:
                 self.log_info(obj=job_result, message=f"{job_result} would be removed if Commit changes was selected.")
-                self.log_success(obj=None, message="Dry Run successfully completed.")
         if commit:
             jobs_to_delete.delete()
             self.log_success(obj=None, message=f"Job results older than {end_time} days old have been deleted.")

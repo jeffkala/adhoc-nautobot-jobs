@@ -30,7 +30,7 @@ class ClearJobResultsJob(Job):
         end_time = data.get("days_to_keep")
 
         for job_result in JobResult.objects.filter(
-            end_time__lte=str(make_aware(datetime.datetime.now()) - datetime.timedelta(days=end_time))
+            completed__lte=str(make_aware(datetime.datetime.now()) - datetime.timedelta(days=end_time))
         ):
             self.log_info(obj=job_result, message=f"{job_result} to be removed")
             if commit:

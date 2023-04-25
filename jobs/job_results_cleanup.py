@@ -1,13 +1,10 @@
 """Jobs to manage the reservation portal."""
 
 import datetime
-import logging
 
 from django.utils.timezone import make_aware
 from nautobot.extras.jobs import IntegerVar, Job
 from nautobot.extras.models import JobResult
-
-LOGGER = logging.getLogger(__name__)
 
 name = "Database Object Cleanups"  # pylint: disable=invalid-name
 
@@ -32,7 +29,8 @@ class ClearJobResultsJob(Job):
         for job_result in JobResult.objects.filter(
             completed__lte=str(make_aware(datetime.datetime.now()) - datetime.timedelta(days=end_time))
         ):
-            self.log_info(obj=job_result, message=f"{job_result} to be removed")
+            if not commit:
+                self.log_info(obj=job_result, message=f"{job_result} would be removed if Commit changes was selected.")
             if commit:
                 job_result.delete()
 

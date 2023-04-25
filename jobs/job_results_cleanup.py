@@ -33,8 +33,7 @@ class ClearJobResultsJob(Job):
                 self.log_info(obj=job_result, message=f"{job_result} would be removed if Commit changes was selected.")
             if commit:
                 status = job_result.delete()
-                self.log_success(obj=None, message=f"Job results older than {end_time} days old have been deleted.")
-                
+                self.log_success(obj=status, message=f"Job results older than {end_time} days old have been deleted.")
 
 
 jobs = [ClearJobResultsJob]

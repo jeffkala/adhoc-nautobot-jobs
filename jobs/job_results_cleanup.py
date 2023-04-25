@@ -32,7 +32,9 @@ class ClearJobResultsJob(Job):
             if not commit:
                 self.log_info(obj=job_result, message=f"{job_result} would be removed if Commit changes was selected.")
             if commit:
-                job_result.delete()
+                status = job_result.delete()
+                self.log_success(obj=None, message=f"Job results older than {end_time} days old have been deleted.")
+                
 
 
 jobs = [ClearJobResultsJob]

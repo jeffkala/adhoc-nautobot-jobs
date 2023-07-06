@@ -1,4 +1,4 @@
-"""Jobs to manage the reservation portal."""
+"""Jobs to manage job results."""
 
 import datetime
 

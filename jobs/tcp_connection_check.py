@@ -2,7 +2,7 @@ from nautobot.apps.jobs import IntegerVar, Job, StringVar
 from netutils.ping import tcp_ping
 
 class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attributes
-    """Nautobot Job for onboarding a new device."""
+    """Nautobot Job for checking a tcp port is 'opened'."""
 
     ip_addresses = StringVar(
         description="IP Address, specify in a comma separated list for multiple ip addresses.",

@@ -1,5 +1,4 @@
-from nautobot.apps.jobs import IntegerVar, Job, StringVar
-from nautobot.core.celery import register_jobs
+from nautobot.apps.jobs import IntegerVar, Job, StringVar, register_jobs
 from netutils.ping import tcp_ping
 
 class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attributes

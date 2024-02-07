@@ -1,4 +1,4 @@
-from nautobot.apps.jobs import IntegerVar, Job, StringVar, register_jobs
+from nautobot.apps.jobs import IntegerVar, Job, StringVar
 from netutils.ping import tcp_ping
 
 class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attributes
@@ -22,7 +22,3 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
         for ipaddr in ip_addresses:
             reach_check = tcp_ping(ipaddr, kwargs["port"])
             self.logger.info("Reachability check to %s:%s boolean result: %s", ipaddr, kwargs["port"], reach_check)
-
-jobs = [ConnectivityCheckTask]
-
-register_jobs(*jobs)

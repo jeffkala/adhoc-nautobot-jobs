@@ -24,7 +24,7 @@ def fetch_data_from_api(url, api_token, org_id):
 
 class CloudSecretRotation(Job):
     """Nautobot Cloud secrets rotation."""
-    nbc_org_id = StringVar(help="Nautobot Cloud Organization ID")
+    nbc_org_id = StringVar()
     nbc_api_token = StringVar(widget=forms.PasswordInput())
     new_secret_value = StringVar(widget=forms.PasswordInput())
     nautobot_cloud_api_token = ObjectVar(model=Secret, queryset=Secret.objects.all())

@@ -59,8 +59,8 @@ class CloudSecretRotation(Job):
                         "nautobot_cloud_secret": ChoiceVar(
                             choices=fetch_data_from_api(
                                 "https://nautobot.cloud/api/secret/",
-                                api_token=cls.nbc_api_token,
-                                org_id=cls.nbc_org_id
+                                api_token="abc",
+                                org_id="abc"
                             )
                         )
                     }

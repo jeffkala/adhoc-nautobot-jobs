@@ -27,7 +27,7 @@ class CloudSecretRotation(Job):
     nbc_org_id = StringVar()
     nbc_api_token = StringVar(widget=forms.PasswordInput())
     new_secret_value = StringVar(widget=forms.PasswordInput())
-    nautobot_cloud_api_token = ObjectVar(model=Secret, queryset=Secret.objects.all())
+    # nautobot_cloud_api_token = ObjectVar(model=Secret, queryset=Secret.objects.all())
     # nautobot_cloud_secret = Future Get automatically joined from _get_vars overload
     nautobot_cloud_secret = StringVar()
 

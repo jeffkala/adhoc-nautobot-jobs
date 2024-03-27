@@ -24,7 +24,7 @@ def fetch_data_from_api(url, api_token, org_id):
 
 
 class CloudSecretRotationv1(Job):
-    """Nautobot Cloud secrets rotation."""
+    """Nautobot Cloud secrets rotation v1."""
     nbc_org_id = StringVar()
     nbc_api_token = StringVar(widget=forms.PasswordInput())
     new_secret_value = StringVar(widget=forms.PasswordInput())
@@ -56,14 +56,10 @@ class CloudSecretRotationv1(Job):
 
 
 class CloudSecretRotationv2(Job):
-    """Nautobot Cloud secrets rotation."""
-    #nbc_org_id = StringVar()
-    #nbc_api_token = StringVar(widget=forms.PasswordInput())
+    """Nautobot Cloud secrets rotation v2."""
     new_secret_value = StringVar(widget=forms.PasswordInput())
     secret_description = StringVar()
-    # nautobot_cloud_api_token = ObjectVar(model=Secret, queryset=Secret.objects.all())
     # nautobot_cloud_secret = Future Get automatically joined from _get_vars overload
-    # nautobot_cloud_secret = StringVar()
 
     class Meta:
         """Job details."""

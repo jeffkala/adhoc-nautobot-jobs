@@ -32,8 +32,8 @@ class CloudSecretRotationv1(Job):
 
     class Meta:
         """Job details."""
-        name = "Rotate a Cloud Secret"
-        description = "Job to perform a Nautobot Cloud Secrets Rotation."
+        name = "Rotate a Cloud Secret v1"
+        description = "Job to perform a Nautobot Cloud Secrets Rotation v1."
         has_sensitive_variables = True
         hidden = False
 
@@ -66,8 +66,8 @@ class CloudSecretRotationv2(Job):
 
     class Meta:
         """Job details."""
-        name = "Rotate a Cloud Secret"
-        description = "Job to perform a Nautobot Cloud Secrets Rotation."
+        name = "Rotate a Cloud Secret v2"
+        description = "Job to perform a Nautobot Cloud Secrets Rotation v2."
         has_sensitive_variables = True
         hidden = False
 
@@ -88,6 +88,7 @@ class CloudSecretRotationv2(Job):
                 cls_vars[name] = getattr(cls, name)
                 # NOTE this is overloaded classmethod from Job base class to inject on-demand choices from NBC.
                 # This next line is the only difference from the inherited class method.
+                print(cls_vars)
                 cls_vars.update(
                     {
                         "nautobot_cloud_secret": ChoiceVar(

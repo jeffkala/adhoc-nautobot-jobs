@@ -70,10 +70,10 @@ class CloudSecretRotation(Job):
 
     def run(self, *args, **data):  # pylint: disable=too-many-branches
         """Run queries against Nautobot cloud and rotate secret values."""
-        self.logger.info(self.nbc_org_id)
-        self.logger.info(self.nbc_api_token)
-        self.logger.info(self.new_secret_value)
-        self.logger.info(self.nautobot_cloud_secret)
+        self.logger.info(data['nbc_org_id'])
+        self.logger.info(data['nbc_api_token'])
+        self.logger.info(data['new_secret_value'])
+        self.logger.info(data['nautobot_cloud_secret'])
         get_secret_url = f"https://nautobot.cloud/api/secret/{data['nautobot_cloud_secret']}/"
         data = {
             "secret_value": {
@@ -83,7 +83,7 @@ class CloudSecretRotation(Job):
         headers = {
             "accept": "application/json",
             "content-type": "application/json",
-            "Authorization": f"Token {self.nbc_api_token}"
+            "Authorization": f"Token {data['nbc_api_token']}"
         }
         result = requests.patch(get_secret_url, headers=headers, data=json.dumps(data), timeout=30)
         self.logger.info(result.json())

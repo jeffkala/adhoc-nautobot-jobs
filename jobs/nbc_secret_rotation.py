@@ -75,7 +75,7 @@ class CloudSecretRotation(Job):
         self.logger.info(data['new_secret_value'])
         self.logger.info(data['nautobot_cloud_secret'])
         get_secret_url = f"https://nautobot.cloud/api/secret/{data['nautobot_cloud_secret']}/"
-        data = {
+        request_data = {
             "secret_value": {
                 f"{data['nautobot_cloud_secret']}": f"{data['new_secret_value']}"
                 }, "description": "a descriptiopn"
@@ -85,5 +85,5 @@ class CloudSecretRotation(Job):
             "content-type": "application/json",
             "Authorization": f"Token {data['nbc_api_token']}"
         }
-        result = requests.patch(get_secret_url, headers=headers, data=json.dumps(data), timeout=30)
+        result = requests.patch(get_secret_url, headers=headers, data=json.dumps(request_data), timeout=30)
         self.logger.info(result.json())

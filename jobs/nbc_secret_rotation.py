@@ -1,6 +1,7 @@
 """Nautobot Cloud Secret Update Job."""
 
 import inspect
+import os
 import json
 import requests
 from django import forms
@@ -56,8 +57,8 @@ class CloudSecretRotationv1(Job):
 
 class CloudSecretRotationv2(Job):
     """Nautobot Cloud secrets rotation."""
-    nbc_org_id = StringVar()
-    nbc_api_token = StringVar(widget=forms.PasswordInput())
+    #nbc_org_id = StringVar()
+    #nbc_api_token = StringVar(widget=forms.PasswordInput())
     new_secret_value = StringVar(widget=forms.PasswordInput())
     secret_description = StringVar()
     # nautobot_cloud_api_token = ObjectVar(model=Secret, queryset=Secret.objects.all())
@@ -88,14 +89,13 @@ class CloudSecretRotationv2(Job):
                 cls_vars[name] = getattr(cls, name)
                 # NOTE this is overloaded classmethod from Job base class to inject on-demand choices from NBC.
                 # This next line is the only difference from the inherited class method.
-                print(cls_vars)
                 cls_vars.update(
                     {
                         "nautobot_cloud_secret": ChoiceVar(
                             choices=fetch_data_from_api(
                                 "https://nautobot.cloud/api/secret/",
-                                api_token=cls_vars['nbc_api_token'],
-                                org_id=cls_vars['nbc_org_id']
+                                api_token=os.getenv('NBC_TOKEN'),
+                                org_id=os.getenv('NBC_ORG_ID'),
                             )
                         )
                     }
@@ -104,10 +104,6 @@ class CloudSecretRotationv2(Job):
 
     def run(self, *args, **data):  # pylint: disable=too-many-branches
         """Run queries against Nautobot cloud and rotate secret values."""
-        self.logger.info(data['nbc_org_id'])
-        self.logger.info(data['nbc_api_token'])
-        self.logger.info(data['new_secret_value'])
-        self.logger.info(data['nautobot_cloud_secret'])
         get_secret_url = f"https://nautobot.cloud/api/secret/{data['nautobot_cloud_secret']}/"
         request_data = {
             "secret_value": {
@@ -117,7 +113,7 @@ class CloudSecretRotationv2(Job):
         headers = {
             "accept": "application/json",
             "content-type": "application/json",
-            "Authorization": f"Token {data['nbc_api_token']}"
+            "Authorization": f"Token {os.getenv('NBC_TOKEN')}"
         }
         result = requests.patch(get_secret_url, headers=headers, data=json.dumps(request_data), timeout=30)
         self.logger.info(result.json())

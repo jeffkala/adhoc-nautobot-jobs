@@ -27,6 +27,7 @@ class CloudSecretRotation(Job):
     nbc_org_id = StringVar()
     nbc_api_token = StringVar(widget=forms.PasswordInput())
     new_secret_value = StringVar(widget=forms.PasswordInput())
+    secret_description = StringVar()
     # nautobot_cloud_api_token = ObjectVar(model=Secret, queryset=Secret.objects.all())
     # nautobot_cloud_secret = Future Get automatically joined from _get_vars overload
     nautobot_cloud_secret = StringVar()
@@ -78,7 +79,7 @@ class CloudSecretRotation(Job):
         request_data = {
             "secret_value": {
                 f"{data['nautobot_cloud_secret']}": f"{data['new_secret_value']}"
-                }, "description": "a descriptiopn"
+                }, "description": f"{data['secret_description']}"
         }
         headers = {
             "accept": "application/json",

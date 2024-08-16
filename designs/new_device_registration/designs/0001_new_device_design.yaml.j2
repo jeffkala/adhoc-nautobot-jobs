@@ -1,0 +1,26 @@
+---
+device_types:
+  - "!create_or_update:model": "generic-{{ device_platform }}-model"
+    manufacturer__name: "{{ device_platform.name.split('_') | first | title }}"
+    "!ref": "generic_model"
+
+ip_addresses:
+  - "!create_or_update:address": "{{ device_mgmt_ip }}"
+    status__name: "Active"
+    "!ref": "mgmt_ip_obj"
+
+devices:
+  - "!create_or_update:name": "{{ device_hostname }}"
+    location__name: "{{ site_name }}"
+    status__name: "Being Assembled"
+    device_type__model: "!ref:generic_model"
+    role__name: "{{ device_role }}"
+    platform__name: "{{ device_platform }}"
+    serial: "{{ device_hostname }}"
+    interfaces:
+      - name: "{{ device_mgmt_interface | canonical_interface_name }}"
+        type: "virtual"
+        description: "Management Interface {{ device_mgmt_ip }}"
+        status__name: "Active"
+        ip_address_assignments:
+          - ip_address: { "!get:address": "{{ device_mgmt_ip }}" }

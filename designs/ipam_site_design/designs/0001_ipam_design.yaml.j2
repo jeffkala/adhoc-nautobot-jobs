@@ -1,0 +1,41 @@
+---
+prefixes:
+  - "!next_prefix":
+      locations__name__in:
+        - "{{ site_name.parent }}"
+        - "{{ site_name.parent.parent }}"
+        - "{{ site_name.parent.parent.parent }}"
+      type: "container"
+      length: {{ ipam_templates[site_size | lower]['template_prefix_size'] | int }}
+      vrfs__isnull: true
+    status__name: "Active"
+    description: "{{ site_name }} Parent Prefix"
+    type: "container"
+    "!ref": "parent_prefix"
+  {% for site_subnets in ipam_templates[site_size | lower]['template_data'] %}
+  - "!child_prefix":
+      parent: "!ref:parent_prefix"
+      offset: "{{ site_subnets['network_offset'] }}"
+    status__name: "Active"
+    location: "{{ site_name.id }}"
+    description: "{{ site_subnets['description'] }}"
+    type: "{{ site_subnets['ipam_type'] }}"
+    {% if '/31' in site_subnets['description'] %}
+    "!ref": "buildout_point_to_points"
+    {% elif '/32' in site_subnets['description'] %}
+    "!ref": "buildout_loopbacks"
+    {% endif %}
+  {% endfor %}
+  {% for lan_subnet in range(0, lan_segments) %}
+  - "!next_prefix":
+      locations__name__in:
+        - "{{ site_name.parent }}"
+        - "{{ site_name.parent.parent }}"
+        - "{{ site_name.parent.parent.parent }}"
+      type: "container"
+      length: 24
+    status__name: "Active"
+    location: "{{ site_name.id }}"
+    description: "LAN address space - #{{ lan_subnet }}"
+    type: "pool"
+  {% endfor %}

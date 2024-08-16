@@ -1,0 +1,4 @@
+---
+devices:
+  - "!create_or_update:name": "{{ device_hostname }}"
+    primary_ip4: { "!get:address": "{{ device_mgmt_ip }}" }

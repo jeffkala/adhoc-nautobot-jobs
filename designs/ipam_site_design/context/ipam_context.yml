@@ -1,0 +1,171 @@
+---
+vrf_names_templates:
+  guest: "L3ACME-GUEST"
+  devices: "L3ACME-DEVICES"
+  user: "L3ACME-USER"
+  industrial: "L3ACME-INDUSTRIAL"
+ipam_templates:
+  micro:
+    template_prefix_size: 25
+    default_buildout:  # Can be removed once github.com/networktocode/netutils/pull/534 is released.
+      p2p: 4
+      loopbacks: 4
+    template_data:
+      - network_offset: "0.0.0.0/27"
+        description: "LAN address space - #1"
+        ipam_type: "network"
+      - network_offset: "0.0.0.32/27"
+        description: "LAN address space - #2"
+        ipam_type: "network"
+      - network_offset: "0.0.0.64/28"
+        description: "Facilities Management systems"
+        ipam_type: "network"
+      - network_offset: "0.0.0.80/28"
+        description: "Unallocated"
+        ipam_type: "network"
+      - network_offset: "0.0.0.96/28"
+        description: "Infrastructure Mgmt (e.g. WLAN access points, switches, etc)"
+        ipam_type: "network"
+      - network_offset: "0.0.0.112/29"
+        description: "/31 Point to Point (within the site)"
+        ipam_type: "container"
+      - network_offset: "0.0.0.120/30"
+        description: "Unallocated"
+        ipam_type: "network"
+      - network_offset: "0.0.0.124/30"
+        description: "/32 Loopbacks"
+        ipam_type: "container"
+    vrf_subnets:
+      guest:
+        num_of_prefixes: 2
+        size_of_prefixes: 27
+      devices:
+        num_of_prefixes: 2
+        size_of_prefixes: 27
+      user:
+        num_of_prefixes: 2
+        size_of_prefixes: 27
+      industrial:
+        num_of_prefixes: 2
+        size_of_prefixes: 27
+  small:
+    template_prefix_size: 24
+    default_buildout:  # Can be removed once github.com/networktocode/netutils/pull/534 is released.
+      p2p: 4
+      loopbacks: 8
+    template_data:
+      - network_offset: "0.0.0.0/26"
+        description: "LAN address space - #1"
+        ipam_type: "pool"
+      - network_offset: "0.0.0.64/26"
+        description: "LAN address space - #2"
+        ipam_type: "pool"
+      - network_offset: "0.0.0.128/26"
+        description: "LAN address space - #3"
+        ipam_type: "pool"
+      - network_offset: "0.0.0.192/27"
+        description: "Infrastructure Mgmt (e.g. WLAN access points, switches, etc)"
+        ipam_type: "pool"
+      - network_offset: "0.0.0.224/28"
+        description: "Facilities Management systems"
+        ipam_type: "network"
+      - network_offset: "0.0.0.240/29"
+        description: "/31 Point to Point (within the site)"
+        ipam_type: "container"
+      - network_offset: "0.0.0.248/29"
+        description: "/32 Loopbacks"
+        ipam_type: "container"
+    vrf_subnets:
+      guest:
+        num_of_prefixes: 2
+        size_of_prefixes: 26
+      devices:
+        num_of_prefixes: 2
+        size_of_prefixes: 27
+      user:
+        num_of_prefixes: 2
+        size_of_prefixes: 26
+      industrial:
+        num_of_prefixes: 2
+        size_of_prefixes: 27
+  medium:
+    template_prefix_size: 24
+    default_buildout:  # Can be removed once github.com/networktocode/netutils/pull/534 is released.
+      p2p: 8
+      loopbacks: 16
+    template_data:
+      - network_offset: "0.0.0.0/26"
+        description: "LAN address space for local servers, other shared services"
+        ipam_type: "network"
+      - network_offset: "0.0.0.64/26"
+        description: "Facilities Management systems"
+        ipam_type: "pool"
+      - network_offset: "0.0.0.128/26"
+        description: "WLAN Mgmt, Switch Mgmt and Opengears"
+        ipam_type: "pool"
+      - network_offset: "0.0.0.192/27"
+        description: "Unallocated"
+        ipam_type: "network"
+      - network_offset: "0.0.0.224/28"
+        description: "/31 Point to Point (within the site)"
+        ipam_type: "container"
+      - network_offset: "0.0.0.240/28"
+        description: "/32 Loopbacks"
+        ipam_type: "container"
+      # LAN segments can be n /24s that are defined in design job inputs.
+      # n LAN segments are also used to create same number of prefixes for vrf assignments.
+    vrf_subnets:
+      guest:
+        num_of_prefixes: "{{ lan_segments }}"
+        size_of_prefixes: 24
+      devices:
+        num_of_prefixes: "{{ lan_segments }}"
+        size_of_prefixes: 26
+      user:
+        num_of_prefixes: "{{ lan_segments }}"
+        size_of_prefixes: 24
+      industrial:
+        num_of_prefixes: "{{ lan_segments }}"
+        size_of_prefixes: 24
+  large:
+    template_prefix_size: 23
+    default_buildout:  # Can be removed once github.com/networktocode/netutils/pull/534 is released.
+      p2p: 16
+      loopbacks: 16
+    template_data:
+      - network_offset: "0.0.0.0/25"
+        description: "LAN address space for local servers, other shared services"
+        ipam_type: "network"
+      - network_offset: "0.0.128.0/25"
+        description: "Facilities Management systems"
+        ipam_type: "pool"
+      - network_offset: "0.0.1.0/25"
+        description: "WLAN Mgmt, Switch Mgmt and Opengears"
+        ipam_type: "pool"
+      - network_offset: "0.0.1.128/26"
+        description: "Unallocated"
+        ipam_type: "network"
+      - network_offset: "0.0.1.192/27"
+        description: "Unallocated"
+        ipam_type: "network"
+      - network_offset: "0.0.1.224/28"
+        description: "/31 Point to Point (within the site)"
+        ipam_type: "container"
+      - network_offset: "0.0.1.240/28"
+        description: "/32 Loopbacks"
+        ipam_type: "container"
+      # LAN segments can be n /24s that are defined in design job inputs.
+      # n LAN segments are also used to create same number of prefixes for vrf assignments.
+    vrf_subnets:
+      guest:
+        num_of_prefixes: "{{ lan_segments }}"
+        size_of_prefixes: 24
+      devices:
+        num_of_prefixes: "{{ lan_segments }}"
+        size_of_prefixes: 26
+      user:
+        num_of_prefixes: "{{ lan_segments }}"
+        size_of_prefixes: 24
+      industrial:
+        num_of_prefixes: "{{ lan_segments }}"
+        size_of_prefixes: 24

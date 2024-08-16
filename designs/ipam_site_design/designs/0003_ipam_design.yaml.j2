@@ -1,0 +1,17 @@
+---
+prefixes:
+  {% for vrf_abbrev, vrf_name in vrf_names_templates.items() %}
+  {% for prefix_number in range(ipam_templates[site_size | lower]['vrf_subnets'][vrf_abbrev]['num_of_prefixes']) %}
+  - "!next_prefix":
+      locations__name__in:
+        - "{{ site_name.parent }}"
+        - "{{ site_name.parent.parent }}"
+        - "{{ site_name.parent.parent.parent }}"
+      length: "{{ ipam_templates[site_size | lower]['vrf_subnets'][vrf_abbrev]['size_of_prefixes'] }}"
+      vrfs__name: "{{ vrf_name }}"
+    status__name: "Active"
+    description: "{{ vrf_name }} address space - #{{ prefix_number }}"
+    location: "{{ site_name.id }}"
+    type: "network"
+  {% endfor %}
+  {% endfor %}

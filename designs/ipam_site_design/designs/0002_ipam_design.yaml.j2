@@ -1,0 +1,18 @@
+---
+prefixes:
+  {% for ipprefix in range(0, ipam_templates[site_size | lower]['default_buildout']['p2p']) %}
+  - "!child_prefix":
+      parent: "!ref:buildout_point_to_points"
+      offset: "0.0.0.{{ ipprefix * 2}}/31"
+    location: "{{ site_name.id }}"
+    status__name: "Active"
+    type: "network"
+  {% endfor %}
+  {% for ipprefix in range(0, ipam_templates[site_size | lower]['default_buildout']['loopbacks']) %}
+  - "!child_prefix":
+      parent: "!ref:buildout_loopbacks"
+      offset: "0.0.0.{{ ipprefix }}/32"
+    location: "{{ site_name.id }}"
+    status__name: "Active"
+    type: "network"
+  {% endfor %}

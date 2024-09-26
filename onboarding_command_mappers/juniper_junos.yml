@@ -6,7 +6,7 @@ sync_devices:
         - command: "show configuration groups | display json"
           parser: "none"
           # Since we use the jdiff custom jmespath we have access to save keys with $ syntax.
-          # {'PEP-WLK-LAB01': 'node0', 'PEP-WLK-LAB02': 'node1'} maybe none as well for non-multire chassis
+          # {'LAB01': 'node0', 'LAB02': 'node1'} maybe none as well for non-multire chassis
           jpath: 'configuration.groups[].{node: name, hostname: system."host-name"}'
           # jpath: '"multi-routing-engine-results"[]."multi-routing-engine-item"[].{hostname: "software-information"[]."host-name"[].data | [0], node: "re-name"[].data | [0]}  || [{hostname: "software-information"[]."host-name"[].data | [0], node:`none`}]'  # yamllint disable-line rule:quoted-strings
           post_processor: "{% set result={} %}{% for re in obj %}{{ result.update({re['hostname']: re['node']}) or '' }}{% endfor %}{{ result | tojson }}"

@@ -3,17 +3,19 @@ sync_devices:
   pre_processor:
     re_map:
       commands:
-        - command: "show version | display json"
+        - command: "show configuration groups | display json"
           parser: "none"
           # Since we use the jdiff custom jmespath we have access to save keys with $ syntax.
           # {'PEP-WLK-LAB01': 'node0', 'PEP-WLK-LAB02': 'node1'} maybe none as well for non-multire chassis
-          jpath: '"multi-routing-engine-results"[]."multi-routing-engine-item"[].{hostname: "software-information"[]."host-name"[].data | [0], node: "re-name"[].data | [0]}  || [{hostname: "software-information"[]."host-name"[].data | [0], node:`none`}]'  # yamllint disable-line rule:quoted-strings
-          post_processor: "{% set result={} %}{% for re in obj %}{{ result.update({re['hostname']: re['node']}) or '' }}{% endfor %}{{ result | tojson }}"
+          jpath: 'configuration.groups[].{name: name, node: system."host-name"}'
+          # jpath: '"multi-routing-engine-results"[]."multi-routing-engine-item"[].{hostname: "software-information"[]."host-name"[].data | [0], node: "re-name"[].data | [0]}  || [{hostname: "software-information"[]."host-name"[].data | [0], node:`none`}]'  # yamllint disable-line rule:quoted-strings
+          # post_processor: "{% set result={} %}{% for re in obj %}{{ result.update({re['hostname']: re['node']}) or '' }}{% endfor %}{{ result | tojson }}"
+          post_processor: "{{ obj | tojson }}"
   hostname:
     commands:
-      - command: "show configuration system host-name | display json"
+      - command: "show system information | display json"
         parser: "none"
-        jpath: '"configuration"."system"."host-name"'
+        jpath: '"system-information"[]."hardware-model"[]."host-name"[].data'
         post_processor: "{% set _=re_map.update({original_host: re_map[obj]}) %}{{ obj }}"
         # post_processor: "{{ obj }}"
   serial:

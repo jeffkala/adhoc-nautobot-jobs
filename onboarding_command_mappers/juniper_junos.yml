@@ -16,7 +16,7 @@ sync_devices:
       - command: "show system information | display json"
         parser: "none"
         jpath: '"system-information"[]."host-name"[].data'
-        post_processor: "{% set _=re_map.update({original_host: re_map[obj]}) %}{{ obj }}"
+        post_processor: "{% set _=re_map.update({original_host: re_map[obj[0]]}) %}{{ obj | unique | first }}"
         # post_processor: "{{ obj }}"
   serial:
     commands:

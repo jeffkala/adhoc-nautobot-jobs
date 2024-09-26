@@ -1,22 +1,32 @@
 ---
 sync_devices:
+  pre_processor:
+    re_map:
+      commands:
+        - command: "show version | display json"
+          parser: "none"
+          # Since we use the jdiff custom jmespath we have access to save keys with $ syntax.
+          # {'PEP-WLK-LAB01': 'node0', 'PEP-WLK-LAB02': 'node1'} maybe none as well for non-multire chassis
+          jpath: '"multi-routing-engine-results"[]."multi-routing-engine-item"[].{hostname: "software-information"[]."host-name"[].data | [0], node: "re-name"[].data | [0]}  || [{hostname: "software-information"[]."host-name"[].data | [0], node:`none`}]'  # yamllint disable-line rule:quoted-strings
+          post_processor: "{% set result={} %}{% for re in obj %}{{ result.update({re['hostname']: re['node']}) or '' }}{% endfor %}{{ result | tojson }}"
   hostname:
     commands:
-      - command: "show version | display json"
+      - command: "show configuration system host-name | display json"
         parser: "none"
-        jpath: '"multi-routing-engine-results"[]."multi-routing-engine-item"[]."software-information"[]."host-name"[].data || "software-information"[]."host-name"[].data'  # yamllint disable-line rule:quoted-strings
-        post_processor: "{{ obj | unique | first }}"
+        jpath: '"configuration"."system"."host-name"'
+        post_processor: "{% set _=re_map.update({original_host: re_map[obj]}) %}{{ obj }}"
+        # post_processor: "{{ obj }}"
   serial:
     commands:
       - command: "show chassis hardware | display json"
         parser: "none"
-        jpath: '"multi-routing-engine-results"[]."multi-routing-engine-item"[]."chassis-inventory"[]."chassis"[]."serial-number"[].data || "chassis-inventory"[]."chassis"[]."serial-number"[].data'  # yamllint disable-line rule:quoted-strings
+        jpath: '"multi-routing-engine-results"[]."multi-routing-engine-item"[?"re-name"[?data==`{{ re_map[original_host] }}`]][]."chassis-inventory"[]."chassis"[]."serial-number"[].data || "chassis-inventory"[]."chassis"[]."serial-number"[].data'  # yamllint disable-line rule:quoted-strings
         post_processor: "{{ obj | unique | first }}"
   device_type:
     commands:
       - command: "show chassis hardware | display json"
         parser: "none"
-        jpath: '"multi-routing-engine-results"[]."multi-routing-engine-item"[]."chassis-inventory"[]."chassis"[]."description"[].data || "chassis-inventory"[]."chassis"[]."description"[].data'  # yamllint disable-line rule:quoted-strings
+        jpath: '"multi-routing-engine-results"[]."multi-routing-engine-item"[?"re-name"[?data==`{{ re_map[original_host] }}`]][]."chassis-inventory"[]."chassis"[]."description"[].data || "chassis-inventory"[]."chassis"[]."description"[].data'  # yamllint disable-line rule:quoted-strings
         post_processor: "{{ obj | unique | first }}"
   mgmt_interface:
     commands:
@@ -26,11 +36,16 @@ sync_devices:
         post_processor: "{% for entry in obj %}{% if entry['ip'] %}{% for ipaddr in entry['ip'] %}{% if original_host in ipaddr %}{{ entry['name'] | first }}{% endif %}{% endfor %}{% endif %}{% endfor %}"
   mask_length:
     commands:
-      - command: "show route protocol direct | display json"
+      - command: "show interfaces | display json"
         parser: "none"
-        jpath: '"route-information"[]."route-table"[]."rt"[]."rt-destination"[].data'  # yamllint disable-line rule:quoted-strings
-        post_processor: "{% set mask = [] %}{% for ip_route in obj %}{% if ip_route | is_network %}{% if ip_route | ipaddress_network('version') == 4 %}{% if original_host | is_ip_within(ip_route) %}{% set _=mask.append(ip_route.split('/')[1]) %}{% endif %}{% endif %}{% endif %}{% endfor %}{{ mask | unique | first}}"
+        jpath: '"interface-information"[]."physical-interface"[]."logical-interface"[]."address-family"[]."interface-address"[]."ifa-destination"[].data'
+        post_processor: "{% for entry in obj %}{% if '.'.join(original_host.split('.')[:3]) in entry %}{{ entry.split('/')[1] }}{% endif %}{% endfor %}"
         iterable_type: "int"
+      # - command: "show route protocol direct | display json"
+      #   parser: "none"
+      #   jpath: '"route-information"[]."route-table"[]."rt"[]."rt-destination"[].data'  # yamllint disable-line rule:quoted-strings
+      #   post_processor: "{% set mask = [] %}{% for ip_route in obj %}{% if ip_route | is_network %}{% if ip_route | ipaddress_network('version') == 4 %}{% if original_host | is_ip_within(ip_route) %}{% set _=mask.append(ip_route.split('/')[1]) %}{% endif %}{% endif %}{% endif %}{% endfor %}{{ mask | unique | first}}"
+      #   iterable_type: "int"
 sync_network_data:
   serial:
     commands:

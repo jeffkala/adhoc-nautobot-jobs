@@ -52,11 +52,12 @@ sync_devices:
         parser: "none"
         # Since we use the jdiff custom jmespath we have access to save keys with $ syntax.
         # {'LAB01': 'node0', 'LAB02': 'node1'} maybe none as well for non-multire chassis
-        jpath: 'configuration.groups[].{node: name, hostname: system."host-name"}'
-        jpath: 'configuration.groups[].[?"re-name"[?data==`{{ re_map[original_host] }}`]].interfaces.interface[].unit[].family.inet.address[].name'
+        # jpath: 'configuration.groups[].{node: name, hostname: system."host-name"}'
+        jpath: 'configuration.groups[?"name"==`{{ re_map[original_host] }}`].interfaces.interface[].unit[].family.inet.address[].name'
+        # jpath: 'configuration.groups[].[?"re-name"[?data==`{{ re_map[original_host] }}`]].interfaces.interface[].unit[].family.inet.address[].name'
         # jpath: '"multi-routing-engine-results"[]."multi-routing-engine-item"[].{hostname: "software-information"[]."host-name"[].data | [0], node: "re-name"[].data | [0]}  || [{hostname: "software-information"[]."host-name"[].data | [0], node:`none`}]'  # yamllint disable-line rule:quoted-strings
         # post_processor: "{% set result={} %}{% for re in obj %}{{ result.update({re['hostname']: re['node']}) or '' }}{% endfor %}{{ result | tojson }}"
-        post_processor: "{{ obj | tojson }}"
+        post_processor: "{{ obj[0].split('/')[1] }}"
 sync_network_data:
   serial:
     commands:

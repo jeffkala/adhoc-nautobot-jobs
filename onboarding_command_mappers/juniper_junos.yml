@@ -38,11 +38,11 @@ sync_devices:
         post_processor: "{% for entry in obj %}{% if entry['ip'] %}{% for ipaddr in entry['ip'] %}{% if original_host in ipaddr %}{{ entry['name'] | first }}{% endif %}{% endfor %}{% endif %}{% endfor %}"
   mask_length:
     commands:
-      - command: "show interfaces | display json"
-        parser: "none"
-        jpath: '"interface-information"[]."physical-interface"[]."logical-interface"[]."address-family"[]."interface-address"[]."ifa-destination"[].data'
-        post_processor: "{% for entry in obj %}{% if '.'.join(original_host.split('.')[:3]) in entry %}{{ entry.split('/')[1] }}{% endif %}{% endfor %}"
-        iterable_type: "int"
+      # - command: "show interfaces | display json"
+      #   parser: "none"
+      #   jpath: '"interface-information"[]."physical-interface"[]."logical-interface"[]."address-family"[]."interface-address"[]."ifa-destination"[].data'
+      #   post_processor: "{% for entry in obj %}{% if '.'.join(original_host.split('.')[:3]) in entry %}{{ entry.split('/')[1] }}{% endif %}{% endfor %}"
+      #   iterable_type: "int"
       # - command: "show route protocol direct | display json"
       #   parser: "none"
       #   jpath: '"route-information"[]."route-table"[]."rt"[]."rt-destination"[].data'  # yamllint disable-line rule:quoted-strings
@@ -58,6 +58,7 @@ sync_devices:
         # jpath: '"multi-routing-engine-results"[]."multi-routing-engine-item"[].{hostname: "software-information"[]."host-name"[].data | [0], node: "re-name"[].data | [0]}  || [{hostname: "software-information"[]."host-name"[].data | [0], node:`none`}]'  # yamllint disable-line rule:quoted-strings
         # post_processor: "{% set result={} %}{% for re in obj %}{{ result.update({re['hostname']: re['node']}) or '' }}{% endfor %}{{ result | tojson }}"
         post_processor: "{{ obj[0].split('/')[1] }}"
+        iterable_type: "int"
 sync_network_data:
   serial:
     commands:

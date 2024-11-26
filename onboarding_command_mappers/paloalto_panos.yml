@@ -1,0 +1,33 @@
+---
+sync_devices:
+  hostname:
+    commands:
+      - command: "show system info"
+        parser: "textfsm"
+        jpath: "[*].HOSTNAME"
+        post_processor: "{{ obj | unique | first }}"
+  serial:
+    commands:
+      - command: "show system info"
+        parser: "textfsm"
+        jpath: "[*].SERIAL"
+        post_processor: "{{ obj | unique | first }}"
+  device_type:
+    commands:
+      - command: "show system info"
+        parser: "textfsm"
+        jpath: "[*].MODEL"
+        post_processor: "{{ obj | unique | first }}"
+  mgmt_interface:
+    commands:
+      - command: "show interface management"
+        parser: "textfsm"
+        jpath: "[*].NAME"
+        post_processor: "{{ obj | unique | first }}"
+  mask_length:
+    commands:
+      - command: "show system info"
+        parser: "textfsm"
+        jpath: "[*].NETMASK"
+        post_processor: "{{ obj | unique | first }}"
+        iterable_type: "int"

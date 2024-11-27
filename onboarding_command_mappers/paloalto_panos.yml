@@ -4,7 +4,7 @@ sync_devices:
     commands:
       - command: "show system info"
         parser: "ttp"
-        jpath: "[*].hostname"
+        jpath: "[*].device_name"
         post_processor: "{{ obj[0] }}"
   serial:
     commands:

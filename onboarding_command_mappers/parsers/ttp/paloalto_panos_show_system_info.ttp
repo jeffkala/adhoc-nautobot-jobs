@@ -1,4 +1,4 @@
-hostname: {{ device_name }}
+hostname: {{ hostname }}
 ip-address: {{ ip_address }}
 netmask: {{ netmask }}
 serial: {{ serial }}

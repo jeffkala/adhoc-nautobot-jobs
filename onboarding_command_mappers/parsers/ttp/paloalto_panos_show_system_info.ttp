@@ -1,0 +1,5 @@
+hostname: {{ device_name }}
+ip-address: {{ ip_address }}
+netmask: {{ netmask }}
+serial: {{ serial }}
+model: {{ model }}

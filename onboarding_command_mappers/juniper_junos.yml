@@ -26,7 +26,7 @@ sync_devices:
         post_processor: "{% for entry in obj %}{% if entry['ip'] %}{% for ipaddr in entry['ip'] %}{% if original_host in ipaddr %}{{ entry['name'] | first }}{% endif %}{% endfor %}{% endif %}{% endfor %}"
   mask_length:
     commands:
-      - command: "show configuration interfaces | display json"
+      - command: "show configuration interfaces | display inheritance no-comments | display json"
         parser: "none"
         jpath: "configuration.interfaces.interface[].unit[?family.inet.address[?contains(name, `{{ obj }}`)]][].family.*.address[][].name"
         post_processor: "{{ obj[0].split('/')[1] }}"
@@ -41,7 +41,7 @@ sync_network_data:
   interfaces:
     root_key: true
     commands:
-      - command: "show configuration interfaces | display json"
+      - command: "show configuration interfaces | display inheritance no-comments | display json"
         parser: "none"
         # when root_key=true this extracted value is what becomes interable in keys using __ under `current_key`.
         jpath: 'configuration.interfaces.interface[].{name: name, units:unit[].name}'   # yamllint disable-line rule:quoted-strings
@@ -75,7 +75,7 @@ sync_network_data:
     commands:
       - command: "show interfaces | display json"
         parser: "none"
-        jpath: '"interface-information"[]["physical-interface"[?name[?data==`{{ current_key }}`]]][][]."description"[].data'  # yamllint disable-line rule:quoted-strings
+        jpath: '"interface-information"[]."physical-interface"[].["logical-interface"[?name[?data==`{{ current_key }}`]]][][]."description"[].data || "interface-information"[]["physical-interface"[?name[?data==`{{ current_key }}`]]][][]."description"[].data'  # yamllint disable-line rule:quoted-strings
         iterable_type: "str"
   interfaces__link_status:
     commands:
@@ -114,6 +114,7 @@ sync_network_data:
         parser: "textfsm"
         jpath: "[?contains(interfaces, `{{ current_key }}`*)].{admin_mode: admin_mode, mode: mode, access_vlan: access_vlan, trunking_vlans: trunking_vlans, native_vlan: native_vlan}"
         post_processor: "{{ obj | get_vlan_data(vlan_map, 'untagged') | tojson }}"
+        iterable_type: "dict"
   cables:
     commands:
       - command: "show lldp neighbors | display json"

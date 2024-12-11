@@ -28,8 +28,8 @@ sync_devices:
     commands:
       - command: "show configuration interfaces | display inheritance no-comments | display json"
         parser: "none"
-        jpath: "configuration.interfaces.interface[].unit[?family.inet.address[?contains(name, `{{ obj }}`)]][].family.*.address[][].name"
-        post_processor: "{{ obj[0].split('/')[1] }}"
+        jpath: "configuration[].interfaces[].interface[].unit[?family[].inet[].address[?contains(name.data, `{{ obj }}`)]][].family[].inet[].address[].name.data"
+        post_processor: "{{ obj[1].split('/')[1] }}"
         iterable_type: "int"
 sync_network_data:
   serial:

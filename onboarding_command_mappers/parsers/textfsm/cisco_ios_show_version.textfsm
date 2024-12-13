@@ -2,7 +2,7 @@ Value SOFTWARE_IMAGE (\S+)
 Value VERSION (.+?)
 Value RELEASE (\S+)
 Value ROMMON (\S+)
-Value HOSTNAME (\S+)
+Value HOSTNAM (\S+)
 Value UPTIME (.+)
 Value UPTIME_YEARS (\d+)
 Value UPTIME_WEEKS (\d+)
@@ -23,7 +23,7 @@ Start
   ^.*Software,*\s+\(${SOFTWARE_IMAGE}\),\sVersion\s${VERSION},*\s+\S+.*:${RELEASE}
   ^.*Software,*\s+\(${SOFTWARE_IMAGE}\),\sVersion\s${VERSION},
   ^ROM:\s+${ROMMON}
-  ^\s*${HOSTNAME}\s+uptime\s+is\s+${UPTIME} -> Continue
+  ^\s*${HOSTNAM}\s+uptime\s+is\s+${UPTIME} -> Continue
   ^.*\s+uptime\s+is.*\s+${UPTIME_YEARS}\syear -> Continue
   ^.*\s+uptime\s+is.*\s+${UPTIME_WEEKS}\sweek -> Continue
   ^.*\s+uptime\s+is.*\s+${UPTIME_DAYS}\sday -> Continue

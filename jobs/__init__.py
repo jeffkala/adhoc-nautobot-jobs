@@ -1,6 +1,6 @@
 """Nautobot Jobs."""
 from nautobot.apps.jobs import register_jobs
-from .command_getter import RunCommand
+from .command_getter import CommandExecution
 
-jobs = [RunCommand]
+jobs = [CommandExecution]
 register_jobs(*jobs)

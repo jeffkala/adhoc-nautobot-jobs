@@ -53,7 +53,7 @@ class CommandExecution(Job):
                         command="show version",
                         use_textfsm=True,
                     )
-                    self.logger.info(result)
+                    self.logger.info(result[0].result)
         except NornirNautobotException as err:
             self.logger.error(err)
   

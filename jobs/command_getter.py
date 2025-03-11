@@ -52,7 +52,6 @@ class CommandExecution(Job):
                         command="show version",
                         use_textfsm=True,
                     )
-                    self.logger.info(dir(result))
                     self.logger.info(result[nr_host][0].result)
         except NornirNautobotException as err:
             self.logger.error(err)

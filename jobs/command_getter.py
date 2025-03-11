@@ -56,3 +56,6 @@ class CommandExecution(Job):
         except NornirNautobotException as err:
             self.logger.error(err)
   
+jobs = [CommandExecution]
+
+register_jobs(*jobs)

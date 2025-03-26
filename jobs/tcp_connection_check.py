@@ -20,12 +20,13 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
 
     def run(self, *args, **kwargs):
         """Process tcp_ping task from job."""
-        # self.logger.info(f"{self.id}")
+        self.logger.info(f"{dir(self.job_result)}")
         # args: ['jobs.jobs.tcp_connection_check.ConnectivityCheckTask']
         tkwargs = {'ip_addresses': '10.1.1.9', 'port': 22}
         sig = signature('jobs.jobs.tcp_connection_check.ConnectivityCheckTask', args=['jobs.jobs.tcp_connection_check.ConnectivityCheckTask'], **tkwargs)
         g = group([sig])
         res = g.apply_async()
+        res.ready()
         self.logger.info("res: %s", res)
         ip_addresses = kwargs["ip_addresses"].replace(" ", "").split(",")
         for ipaddr in ip_addresses:

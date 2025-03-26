@@ -26,7 +26,7 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
         sig = signature('jobs.jobs.tcp_connection_check.ConnectivityCheckTask', args=['jobs.jobs.tcp_connection_check.ConnectivityCheckTask'], **tkwargs)
         g = group(sig)
         res = g()
-        res.get()
+        # res.get()
         
         ip_addresses = kwargs["ip_addresses"].replace(" ", "").split(",")
         for ipaddr in ip_addresses:

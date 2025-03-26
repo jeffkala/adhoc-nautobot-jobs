@@ -18,6 +18,7 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
 
     def run(self, *args, **kwargs):
         """Process tcp_ping task from job."""
+        self.logger.info(f"{dir(self)}")
         ip_addresses = kwargs["ip_addresses"].replace(" ", "").split(",")
         for ipaddr in ip_addresses:
             reach_check = tcp_ping(ipaddr, kwargs["port"])

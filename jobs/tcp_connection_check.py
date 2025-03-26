@@ -24,11 +24,9 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
         # args: ['jobs.jobs.tcp_connection_check.ConnectivityCheckTask']
         tkwargs = {'ip_addresses': '10.1.1.9', 'port': 22}
         sig = signature('jobs.jobs.tcp_connection_check.ConnectivityCheckTask', args=['jobs.jobs.tcp_connection_check.ConnectivityCheckTask'], kwargs=**tkwargs)
-        g = group(sig)
+        g = group([sig])
         res = g.apply_async()
-        self.logger.info(f"{res}")
-        # res.get()
-        
+        self.logger.info("res: %s", res)
         ip_addresses = kwargs["ip_addresses"].replace(" ", "").split(",")
         for ipaddr in ip_addresses:
             reach_check = tcp_ping(ipaddr, kwargs["port"])

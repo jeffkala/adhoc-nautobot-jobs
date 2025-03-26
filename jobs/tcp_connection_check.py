@@ -26,8 +26,9 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
         #  'task_args', 'task_kwargs', 'task_name'
         self.logger.info(self.job_result.task_args)
         self.logger.info(self.job_result.task_kwargs)
+        self.logger.info(self.job_result.celery_kwargs)
         self.logger.info(self.job_result.task_name)
-        sig = signature('jobs.jobs.tcp_connection_check.ConnectivityCheckTask', args=self.job_result.task_args, **tkwargs)
+        sig = signature('jobs.jobs.tcp_connection_check.ConnectivityCheckTask', args=self.job_result.celery_kwargs, **tkwargs)
         g = group([sig])
         res = g.apply_async()
         res.ready()

@@ -28,7 +28,7 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
         g = group(sig,)
         res = g(routing_key="default", hostname=gethostname())
         res.ready()
-        self.logger.info("res: %s", res)
+        self.logger.info("res: %s", res.apply_async())
         ip_addresses = kwargs["ip_addresses"].replace(" ", "").split(",")
         for ipaddr in ip_addresses:
             reach_check = tcp_ping(ipaddr, kwargs["port"])

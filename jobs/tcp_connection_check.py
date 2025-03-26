@@ -27,8 +27,7 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
         sig = signature('jobs.jobs.tcp_connection_check.ConnectivityCheckTask', args=('jobs.jobs.tcp_connection_check.ConnectivityCheckTask',{'properties':{'exchange': '', 'routing_key': 'default'}}), routing_key="default", kwargs=tkwargs)
         g = group(sig,)
         res = g(routing_key="default", hostname=gethostname())
-        res.ready()
-        self.logger.info("res: %s", res.apply_async())
+        self.logger.info("res: %s", res.results)
         ip_addresses = kwargs["ip_addresses"].replace(" ", "").split(",")
         for ipaddr in ip_addresses:
             reach_check = tcp_ping(ipaddr, kwargs["port"])

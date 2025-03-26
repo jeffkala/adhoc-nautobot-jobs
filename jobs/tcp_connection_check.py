@@ -23,16 +23,12 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
         self.logger.info(f"{dir(self.job_result)}")
         # args: ['jobs.jobs.tcp_connection_check.ConnectivityCheckTask']
         tkwargs = {'ip_addresses': '10.1.1.9', 'port': 22}
-        #  'task_args', 'task_kwargs', 'task_name'
-        self.logger.info(self.job_result.task_args)
-        self.logger.info(self.job_result.task_kwargs)
-        self.logger.info(self.job_result.celery_kwargs)
-        self.logger.info(self.job_result.task_name)
-
-        sig = signature('jobs.jobs.tcp_connection_check.ConnectivityCheckTask', args=('jobs.jobs.tcp_connection_check.ConnectivityCheckTask',), routing_key="default",kwargs=tkwargs)
-        g = group([sig])
-        res = g.apply_async()
-        res.ready()
+        s = signature('tasks.add', args=(2, 2))
+            signature(s)
+        sig = signature('jobs.jobs.tcp_connection_check.ConnectivityCheckTask', args=['jobs.jobs.tcp_connection_check.ConnectivityCheckTask'], routing_key="default", kwargs=tkwargs)
+        g = group([sig,])()
+        # res = g.apply_async(sig)
+        # res.ready()
         self.logger.info("res: %s", res)
         ip_addresses = kwargs["ip_addresses"].replace(" ", "").split(",")
         for ipaddr in ip_addresses:

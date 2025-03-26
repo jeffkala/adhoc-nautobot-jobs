@@ -2,6 +2,7 @@ from nautobot.apps.jobs import IntegerVar, Job, StringVar
 from netutils.ping import tcp_ping
 from celery import group
 from celery import signature
+from celery.utils.nodenames import gethostname
 
 class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attributes
     """Nautobot Job for checking a tcp port is 'opened'."""
@@ -23,9 +24,9 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
         self.logger.info(f"{dir(self.job_result)}")
         # args: ['jobs.jobs.tcp_connection_check.ConnectivityCheckTask']
         tkwargs = {'ip_addresses': '10.1.1.9', 'port': 22}
-        sig = signature('jobs.jobs.tcp_connection_check.ConnectivityCheckTask', args=['jobs.jobs.tcp_connection_check.ConnectivityCheckTask'], routing_key="default", kwargs=tkwargs)
+        sig = signature('jobs.jobs.tcp_connection_check.ConnectivityCheckTask', args=(,), routing_key="default", kwargs=tkwargs)
         g = group(sig,)
-        res = g(routing_key="default")
+        res = g(routing_key="default", hostname=gethostname())
         res.ready()
         self.logger.info("res: %s", res)
         ip_addresses = kwargs["ip_addresses"].replace(" ", "").split(",")

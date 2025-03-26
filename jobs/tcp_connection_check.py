@@ -24,7 +24,7 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
         self.logger.info(f"{dir(self.job_result)}")
         # args: ['jobs.jobs.tcp_connection_check.ConnectivityCheckTask']
         tkwargs = {'ip_addresses': '10.1.1.9', 'port': 22}
-        sig = signature('jobs.jobs.tcp_connection_check.ConnectivityCheckTask', args=(,), routing_key="default", kwargs=tkwargs)
+        sig = signature('jobs.jobs.tcp_connection_check.ConnectivityCheckTask', args=('jobs.jobs.tcp_connection_check.ConnectivityCheckTask',{'properties':{'exchange': '', 'routing_key': 'default'}), routing_key="default", kwargs=tkwargs)
         g = group(sig,)
         res = g(routing_key="default", hostname=gethostname())
         res.ready()

@@ -31,7 +31,7 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
         # g = group(sig,)
         # res = g(routing_key="default", hostname=gethostname())
         # sig = signature('nautobot.extras.jobs.run_job', args=('jobs.jobs.tcp_connection_check.ConnectivityCheckTask',{}), celery_kwargs=self.job_result.celery_kwargs, routing_key="default", kwargs=tkwargs)
-        sig = signature('nautobot.extras.jobs.run_job', args=('jobs.jobs.tcp_connection_check.ConnectivityCheckTask',self.job_result.celery_kwargs), kwargs=tkwargs)
+        sig = signature('nautobot.extras.jobs.run_job', args=(['jobs.jobs.tcp_connection_check.ConnectivityCheckTask'],), kwargs=tkwargs, celery_kwargs=self.job_result.celery_kwargs)
         g = group(sig,)
         res = g(routing_key="default", hostname=gethostname())
         self.logger.info("res: %s", res.results)

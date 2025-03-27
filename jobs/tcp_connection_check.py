@@ -22,6 +22,8 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
     def run(self, *args, **kwargs):
         """Process tcp_ping task from job."""
         self.logger.info(f"{dir(self.job_result)}")
+        self.logger.info(f"{self.job_result.task_kwargs}")
+        self.logger.info(f"{self.job_result.celery_kwargs}")
         # args: ['jobs.jobs.tcp_connection_check.ConnectivityCheckTask']
         tkwargs = {'ip_addresses': '10.1.1.9', 'port': 22}
         sig = signature('nautobot.extras.jobs.run_job', args=('jobs.jobs.tcp_connection_check.ConnectivityCheckTask',{'properties':{'exchange': '', 'routing_key': 'default'}}), routing_key="default", kwargs=tkwargs)

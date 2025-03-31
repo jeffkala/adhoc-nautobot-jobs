@@ -31,7 +31,11 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
         # args: ['jobs.jobs.tcp_connection_check.ConnectivityCheckTask']
         tkwargs = {'ip_addresses': '10.1.1.9', 'port': 22}
         nr = InitNornir(
-            runner=NORNIR_SETTINGS.get("runner"),
+            runner={
+                "plugin": "threaded",
+                "options": {
+                    "num_workers": 20,
+                },
             logging={"enabled": False},
             inventory={
                 "plugin": "nautobot-inventory",

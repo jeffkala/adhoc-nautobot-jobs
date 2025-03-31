@@ -35,7 +35,7 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
                 "plugin": "threaded",
                 "options": {
                     "num_workers": 20,
-                },
+                }},
             logging={"enabled": False},
             inventory={
                 "plugin": "nautobot-inventory",

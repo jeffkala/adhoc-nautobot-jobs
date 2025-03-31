@@ -4,7 +4,7 @@ from celery import group
 from celery import signature
 from celery.utils.nodenames import gethostname
 from nautobot.dcim.models import Device
-
+from nornir import InitNornir
 
 class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attributes
     """Nautobot Job for checking a tcp port is 'opened'."""

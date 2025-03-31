@@ -7,6 +7,7 @@ from nautobot.dcim.models import Device
 from nornir import InitNornir
 from nornir.core.plugins.inventory import InventoryPluginRegister
 from nautobot_plugin_nornir.plugins.inventory.nautobot_orm import NautobotORMInventory
+from nautobot_plugin_nornir.jobs import hello_world
 
 InventoryPluginRegister.register("nautobot-inventory", NautobotORMInventory)
 

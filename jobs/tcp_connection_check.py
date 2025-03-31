@@ -42,7 +42,7 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
                 "options": {
                     "credentials_class": "nautobot_plugin_nornir.plugins.credentials.env_vars.CredentialsEnvVars",
                     "queryset": Device.objects.first(),
-                    "defaults": {"now": datetime.now()},
+                    "defaults": {"now": "now"},
                 },
             },
         )

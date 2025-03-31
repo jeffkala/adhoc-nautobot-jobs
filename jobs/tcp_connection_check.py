@@ -36,8 +36,12 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
             inventory={
                 "plugin": "nautobot-inventory",
                 "options": {
-                    "credentials_class": NORNIR_SETTINGS.get("credentials"),
-                    "params": NORNIR_SETTINGS.get("inventory_params"),
+                    "runner": {
+                    "plugin": "threaded",
+                    "options": {
+                        "num_workers": 20,
+                    },
+                    "credentials_class": "nautobot_plugin_nornir.plugins.credentials.env_vars.CredentialsEnvVars",
                     "queryset": Device.objects.first(),
                     "defaults": {"now": datetime.now()},
                 },

@@ -64,7 +64,7 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
         # sig = signature('nautobot_plugin_nornir.jobs.hello_world', args=(nr.inventory.hosts["csr-0"],), kwargs={}, routing_key="default", hostname=gethostname())
         # g = group(sig,)
         # res = g()
-        self.logger.info("res: %s", res.results)
+        self.logger.info("res: %s", result.results)
         ip_addresses = kwargs["ip_addresses"].replace(" ", "").split(",")
         for ipaddr in ip_addresses:
             reach_check = tcp_ping(ipaddr, kwargs["port"])

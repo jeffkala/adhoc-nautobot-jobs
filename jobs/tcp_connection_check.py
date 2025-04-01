@@ -9,7 +9,7 @@ from nornir.core.plugins.inventory import InventoryPluginRegister
 # from nornir.core.plugins.runner import RunnerPluginRegister
 from nautobot_plugin_nornir.plugins.inventory.nautobot_orm import NautobotORMInventory
 from nautobot_plugin_nornir.jobs import hello_world
-from nautobot_plugin_nornir.plugins.runner import CeleryTaskRunner
+from nautobot_plugin_nornir.plugins.runner.celery_runner import CeleryTaskRunner
 
 InventoryPluginRegister.register("nautobot-inventory", NautobotORMInventory)
 # RunnerPluginRegister.resgister("celery-runner", CeleryTaskRunner)

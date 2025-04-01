@@ -12,7 +12,7 @@ from nautobot_plugin_nornir.jobs import hello_world
 from nautobot_plugin_nornir.plugins.runner.celery_runner import CeleryTaskRunner
 
 InventoryPluginRegister.register("nautobot-inventory", NautobotORMInventory)
-RunnerPluginRegister.register("celery-runner", CeleryTaskRunner)
+RunnersPluginRegister.register("celery-runner", CeleryTaskRunner)
 
 
 class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attributes

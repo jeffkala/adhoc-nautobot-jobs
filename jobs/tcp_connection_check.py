@@ -6,13 +6,13 @@ from celery.utils.nodenames import gethostname
 from nautobot.dcim.models import Device
 from nornir import InitNornir
 from nornir.core.plugins.inventory import InventoryPluginRegister
-from nornir.core.plugins.runner import RunnerPluginRegister
+# from nornir.core.plugins.runner import RunnerPluginRegister
 from nautobot_plugin_nornir.plugins.inventory.nautobot_orm import NautobotORMInventory
 from nautobot_plugin_nornir.jobs import hello_world
 from nautobot_plugin_nornir.plugins.runner import CeleryTaskRunner
 
 InventoryPluginRegister.register("nautobot-inventory", NautobotORMInventory)
-RunnerPluginRegister.resgister("celery-runner", CeleryTaskRunner)
+# RunnerPluginRegister.resgister("celery-runner", CeleryTaskRunner)
 
 
 class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attributes
@@ -41,7 +41,7 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
         tkwargs = {'ip_addresses': '10.1.1.9', 'port': 22}
         nr = InitNornir(
             runner={
-                "plugin": "celery-runner",
+                "plugin": "CeleryTaskRunner",
                 # "options": {
                 #     "num_workers": 20,
                 },

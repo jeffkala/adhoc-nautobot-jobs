@@ -56,6 +56,7 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
             },
         )
         result = nr.run(task=hello_world)
+        print(result)
         # print(result)
         # # sig = signature('nautobot.extras.jobs.run_job', args=('jobs.jobs.tcp_connection_check.ConnectivityCheckTask',{'properties':{'exchange': '', 'routing_key': 'default'}}), routing_key="default", kwargs=tkwargs)
         # # g = group(sig,)
@@ -64,8 +65,8 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
         # sig = signature('nautobot_plugin_nornir.jobs.hello_world', args=(nr.inventory.hosts["csr-0"],), kwargs={}, routing_key="default", hostname=gethostname())
         # g = group(sig,)
         # res = g()
-        self.logger.info("res: %s", result.results)
-        ip_addresses = kwargs["ip_addresses"].replace(" ", "").split(",")
-        for ipaddr in ip_addresses:
-            reach_check = tcp_ping(ipaddr, kwargs["port"])
-            self.logger.info("Reachability check to %s:%s boolean result: %s", ipaddr, kwargs["port"], reach_check)
+        # self.logger.info("res: %s", result.results)
+        # ip_addresses = kwargs["ip_addresses"].replace(" ", "").split(",")
+        # for ipaddr in ip_addresses:
+        #     reach_check = tcp_ping(ipaddr, kwargs["port"])
+        #     self.logger.info("Reachability check to %s:%s boolean result: %s", ipaddr, kwargs["port"], reach_check)

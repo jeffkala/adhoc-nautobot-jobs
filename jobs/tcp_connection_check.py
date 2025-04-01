@@ -56,7 +56,7 @@ class ConnectivityCheckTask(Job):  # pylint: disable=too-many-instance-attribute
             },
         )
         result = nr.run(task=hello_world)
-        print(result)
+        print(result.results)
         # print(result)
         # # sig = signature('nautobot.extras.jobs.run_job', args=('jobs.jobs.tcp_connection_check.ConnectivityCheckTask',{'properties':{'exchange': '', 'routing_key': 'default'}}), routing_key="default", kwargs=tkwargs)
         # # g = group(sig,)
